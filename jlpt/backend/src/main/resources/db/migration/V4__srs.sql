@@ -1,0 +1,5 @@
+ALTER TABLE study_progress
+    ADD COLUMN ease_factor    DOUBLE PRECISION NOT NULL DEFAULT 2.5,
+    ADD COLUMN interval_days  INT NOT NULL DEFAULT 0,
+    ADD COLUMN repetitions    INT NOT NULL DEFAULT 0,
+    ADD COLUMN next_review_at TIMESTAMPTZ;

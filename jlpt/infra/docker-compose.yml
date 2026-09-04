@@ -1,0 +1,93 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: jlpt-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: jlpt
+      POSTGRES_USER: jlpt
+      POSTGRES_PASSWORD: jlpt
+    ports:
+      - "5433:5432" # host 5433 to avoid clashing with any local Postgres already on 5432
+    volumes:
+      - jlpt_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U jlpt -d jlpt"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  minio:
+    image: minio/minio:latest
+    container_name: jlpt-minio
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: jlpt_admin
+      MINIO_ROOT_PASSWORD: jlpt_admin_secret
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - jlpt_minio_data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  minio-init:
+    image: minio/mc:latest
+    container_name: jlpt-minio-init
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: >
+      /bin/sh -c "
+      mc alias set local http://minio:9000 jlpt_admin jlpt_admin_secret &&
+      mc mb -p local/jlpt-audio &&
+      exit 0
+      "
+
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    container_name: jlpt-backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: jlpt
+      DB_USER: jlpt
+      DB_PASSWORD: jlpt
+      MINIO_ENDPOINT: http://minio:9000
+      MINIO_ACCESS_KEY: jlpt_admin
+      MINIO_SECRET_KEY: jlpt_admin_secret
+      MINIO_BUCKET: jlpt-audio
+      JWT_SECRET: change-this-development-secret-key-min-256-bits-long-please
+      CORS_ALLOWED_ORIGINS: http://localhost:3000,http://localhost:5173
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: http://localhost:8080
+    container_name: jlpt-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "3000:80"
+
+volumes:
+  jlpt_postgres_data:
+  jlpt_minio_data:

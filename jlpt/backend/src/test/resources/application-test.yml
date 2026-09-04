@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:jlpt_test;MODE=PostgreSQL;DB_CLOSE_DELAY=-1
+    username: sa
+    password: sa
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+  flyway:
+    enabled: false
+
+jlpt:
+  jwt:
+    secret: test-secret-key-for-jwt-signing-in-unit-tests-only-not-for-prod
+    access-token-expiration-minutes: 60
+    refresh-token-expiration-days: 14
+  minio:
+    endpoint: http://localhost:9000
+    access-key: test
+    secret-key: test
+    bucket: jlpt-audio-test
+    presigned-url-expiry-minutes: 60

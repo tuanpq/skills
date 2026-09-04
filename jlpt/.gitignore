@@ -1,0 +1,30 @@
+## Backend (Maven / Java)
+backend/target/
+*.class
+*.jar
+!.mvn/wrapper/maven-wrapper.jar
+
+## Frontend (Node, future)
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+
+## Mobile (Flutter, future)
+mobile/.dart_tool/
+mobile/build/
+mobile/.flutter-plugins
+mobile/.flutter-plugins-dependencies
+
+## IDE
+.idea/
+*.iml
+.vscode/
+
+## OS
+.DS_Store
+Thumbs.db
+
+## Env / secrets
+.env
+.env.*
+!.env.example
