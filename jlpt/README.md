@@ -5,10 +5,11 @@ Từ vựng/Kanji (文字・語彙), Ngữ pháp (文法), Đọc hiểu (読解
 
 ## Trạng thái hiện tại
 
-**Backend** (Spring Boot + PostgreSQL + MinIO), **Frontend** (ReactJS) và **Mobile** (Flutter) đều đã
-triển khai đầy đủ luồng chính: đăng ký/đăng nhập, học từ vựng/kanji/ngữ pháp (flashcard + **Ôn tập
-SRS** kiểu Anki), làm đề luyện thi + chấm điểm tự động, xem kết quả, theo dõi tiến độ cá nhân —
-Frontend và Mobile dùng chung một REST API backend.
+**Backend** (Spring Boot + PostgreSQL + MinIO), **Frontend** (ReactJS), **Mobile** (Flutter),
+**Native Android** (Kotlin + Jetpack Compose) và **Native iOS** (SwiftUI) đều đã triển khai đầy đủ
+luồng chính: đăng ký/đăng nhập, học từ vựng/kanji/ngữ pháp (flashcard + **Ôn tập SRS** kiểu Anki),
+làm đề luyện thi + chấm điểm tự động, xem kết quả, theo dõi tiến độ cá nhân — tất cả client dùng
+chung một REST API backend.
 
 ## Cấu trúc thư mục
 
@@ -17,6 +18,8 @@ jlpt/
 ├── backend/          # Spring Boot API
 ├── frontend/         # ReactJS (Vite + TypeScript + Tailwind)
 ├── mobile/           # Flutter (Android/iOS/Web)
+├── native_android/   # Kotlin + Jetpack Compose (Clean Architecture), xem native_android/README.md
+├── native_ios/       # SwiftUI (Clean Architecture), xem native_ios/README.md
 ├── infra/
 │   └── docker-compose.yml   # postgres + minio + backend + frontend
 └── .github/workflows/{backend,frontend,mobile}-ci.yml
@@ -161,6 +164,51 @@ cd mobile
 flutter analyze
 flutter test
 ```
+
+## Native Android
+
+- Kotlin + Jetpack Compose (Material 3), Clean Architecture (`presentation` → `domain` → `data`)
+  trong một module `:app` duy nhất
+- Hilt (DI), Retrofit + OkHttp + kotlinx.serialization (networking, tự refresh token qua một
+  `Authenticator`), DataStore (lưu phiên đăng nhập), Navigation Compose, Media3 ExoPlayer (phát audio
+  Nghe)
+- Cùng bộ tính năng cốt lõi với Flutter/Web: Đăng nhập/Đăng ký, Trang chủ, Học (tab Từ vựng/Kanji/Ngữ
+  pháp) với **Ôn tập SRS**, Luyện thi (làm bài có autosave, phát audio Nghe, xem kết quả + lịch sử),
+  Tiến độ
+
+### Chạy local (dev)
+
+```bash
+cd native_android
+./gradlew :app:installDebug   # cần thiết bị/emulator đã kết nối
+```
+
+Chi tiết (build không cần thiết bị, chạy trên thiết bị thật cần đổi `API_BASE_URL`, v.v.) xem
+`native_android/README.md`.
+
+## Native iOS
+
+- Swift + SwiftUI (`NavigationStack`), Clean Architecture (`Presentation` → `Domain` → `Data`),
+  **không dùng thư viện bên thứ ba nào** — chỉ Foundation/SwiftUI/Security/AVFoundation
+- Dự án dùng [XcodeGen](https://github.com/yonaskolb/XcodeGen) (`project.yml`) thay vì commit thẳng
+  `.xcodeproj`; `async`/`await` + `actor TokenStore` xuyên suốt cho việc quản lý phiên đăng nhập +
+  tự refresh token, Keychain (lưu phiên đăng nhập), AVPlayer (phát audio Nghe)
+- Cùng bộ tính năng cốt lõi với Android/Flutter/Web: Đăng nhập/Đăng ký, Trang chủ, Học (tab Từ
+  vựng/Kanji/Ngữ pháp) với **Ôn tập SRS**, Luyện thi (làm bài có autosave, phát audio Nghe, xem kết
+  quả + lịch sử), Tiến độ
+
+### Chạy local (dev, cần macOS + Xcode)
+
+```bash
+brew install xcodegen
+cd native_ios
+xcodegen generate
+open JlptApp.xcodeproj
+```
+
+Chi tiết (chạy trên thiết bị thật cần đổi `APIConfig.baseURL`, v.v.) xem `native_ios/README.md`.
+Dự án này được viết mà **chưa có máy Mac/Xcode để build thử** — về mặt kiến trúc và cú pháp đã được
+rà soát kỹ, nhưng lần build đầu tiên trong Xcode mới là phép thử thực sự.
 
 ## CI/CD
 
