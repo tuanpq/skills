@@ -1,0 +1,44 @@
+version: 1
+
+language:
+  primary: ja-JP
+  source-identifiers: preserve
+  comments: concise
+
+evidence:
+  require-for-major-claims: true
+  allowed-types:
+    - FACT
+    - INFERENCE
+    - UNKNOWN
+
+security:
+  redact-secrets: true
+  never-document:
+    - passwords
+    - tokens
+    - private-keys
+    - connection-string-credentials
+
+diagrams:
+  format: mermaid
+  max-recommended-nodes: 15
+
+newcomer:
+  target:
+    first-mental-model-minutes: 5
+    productive-understanding-minutes: 30
+    deep-understanding-minutes: 60
+
+quality:
+  required-documents:
+    - 00_README.md
+    - 01_SYSTEM_OVERVIEW.md
+    - 02_ARCHITECTURE.md
+    - 04_RUNTIME_FLOW.md
+    - 06_DATA_MODEL.md
+    - 07_API_AND_INTEGRATION.md
+    - 09_ERROR_AND_RECOVERY.md
+    - 12_BUILD_DEPLOY_OPERATION.md
+    - 14_NEW_MEMBER_GUIDE.md
+    - 16_TRACEABILITY.md

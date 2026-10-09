@@ -1,0 +1,5 @@
+id,type,claim,source,locator,confidence,used_in
+EV-0001,FACT,Application starts from HTTP server entry point,src/server.ts,createServer(),high,01_SYSTEM_OVERVIEW.md;04_RUNTIME_FLOW.md
+EV-0002,FACT,Orders are persisted through OrderRepository,src/order/OrderRepository.ts,save(),high,06_DATA_MODEL.md;04_RUNTIME_FLOW.md
+EV-0003,INFERENCE,Processing is intended to be idempotent because duplicate key handling exists,src/order/OrderRepository.ts,unique constraint + catch branch,medium,08_BATCH_AND_ASYNC.md
+EV-0004,UNKNOWN,Production retry policy is not defined in repository,,,low,09_ERROR_AND_RECOVERY.md

@@ -1,0 +1,19 @@
+# Repository Documentation Instructions
+
+This repository uses the Japanese Source-to-Documentation Kit.
+
+When asked to document or reverse-engineer the system:
+
+1. Read `skills/japanese-source-to-docs/SKILL.md`.
+2. Follow evidence-first analysis.
+3. Treat source code and executable configuration as primary evidence.
+4. Do not invent business requirements.
+5. Redact secrets.
+6. Generate newcomer-first documentation.
+7. Use Mermaid for architecture and important flows.
+8. Keep a traceability matrix.
+9. Explicitly record unknowns.
+10. Run `python scripts/doc_lint.py docs` before completion.
+
+Documentation language: Japanese.
+Source identifiers: preserve exact spelling.

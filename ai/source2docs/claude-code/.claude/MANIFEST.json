@@ -1,0 +1,16 @@
+{
+  "name": "japanese-source-to-docs-kit",
+  "version": "1.0.0",
+  "purpose": "Source-code-only Japanese technical documentation generation for Claude Code",
+  "file_count": 52,
+  "components": {
+    "skills": 1,
+    "prompts": 4,
+    "agents": 12,
+    "templates": 18,
+    "references": 3,
+    "scripts": 4,
+    "config": 1,
+    "claude-code": 2
+  }
+}
