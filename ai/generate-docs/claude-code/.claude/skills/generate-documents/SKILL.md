@@ -1,5 +1,5 @@
 ---
-name: repo-architecture-docs
+name: generate-documents
 description: Explore a source-code repository and generate standards-aligned software documentation, including SRS, SAD, SDD, C4 architecture models, and data-flow diagrams. Use when the user asks to document a repository, reverse-engineer architecture, create software requirements/design documentation, or produce C4/data-flow diagrams from code.
 ---
 
